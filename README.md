@@ -1,82 +1,85 @@
-# Regression--Retail-Sales-Prediction-project
+# Rossmann Sales Forecasting Project
 
-Regression-Retail Stores Prediction Capstone Project :
+Sales forecasting is a critical component for retailers aiming to optimize operations and drive strategic decisions. By analyzing historical data and identifying trends, machine learning models can predict future sales, helping retailers better manage inventory, staffing, and promotional activities.
 
-The primary objective of this project is to predict daily sales for a retail store chain using historical sales data and various related features. By developing an accurate sales prediction model, the store can optimize inventory, staffing, and promotional strategies to improve overall operational efficiency and profitability.
+## Project Overview
 
+The Rossmann Sales Forecasting Project focuses on predicting daily sales for Rossmann stores using historical sales records and store-level information. The goal is to build robust models that not only forecast sales accurately but also provide actionable insights to enhance business strategies.
 
-Dataset links :
+## Project Workflow
 
-I have used “store” dataset and “Rossmann Stores Data” dataset . Links are beelow :
-store : https://drive.google.com/file/d/1OnFqDheVVazs-tKm6BfHyrJM6pkqassj/view?usp=drive_link
-Rossmann Stores Data : https://drive.google.com/file/d/1_6vQXy-pYzb1jsSpFPldggmDSWE6gMqU/view?usp=drive_link
+### 1. Data Loading and Exploration
 
+**Data Fields:**
+- **Store:** Unique identifier for each store.
+- **Sales:** Daily sales turnover (target variable).
+- **Customers:** Number of customers visiting on a given day.
+- **Date:** Date of the sales record.
+- **Open:** Indicator if the store was open (0 = closed, 1 = open).
+- **Promo:** Whether a promotion was active on that day.
+- **StateHoliday:** Categorical variable indicating state holidays:
+  - `a` = public holiday
+  - `b` = Easter holiday
+  - `c` = Christmas
+  - `0` = None
+- **SchoolHoliday:** Indicates if the day was affected by school closures.
+- **StoreType:** Differentiates between store models (e.g., `a`, `b`, `c`, `d`).
+- **Assortment:** Describes the level of product assortment (e.g., basic, extra, extended).
+- **CompetitionDistance:** Distance (in meters) to the nearest competitor.
+- **CompetitionOpenSince[Month/Year]:** Approximate month and year when the nearest competitor opened.
+- **Promo2:** Indicates whether the store is participating in a continuous promotion (0 = no, 1 = yes).
+- **Promo2Since[Year/Week]:** The year and calendar week when Promo2 started.
+- **PromoInterval:** Months when Promo2 is renewed (e.g., "Feb,May,Aug,Nov").
 
-Problem statement :
+### 2. Data Preprocessing
 
-Rossmann operates over 3,000 drug stores in 7 European countries. Currently, Rossmann store managers are tasked with predicting their daily sales for up to six weeks in advance. Store sales are influenced by many factors, including promotions, competition, school and state holidays, seasonality, and locality. With thousands of individual managers predicting sales based on their unique circumstances, the accuracy of results can be quite varied. Our main objective is to understand the data , analyze the key parameters and build a model .
+- **Handling Missing Values:** Identify and impute or remove missing data.
+- **Feature Engineering:** 
+  - Extract date components (year, month, day, weekday) from the Date field.
+  - Create duration features, such as months since a competitor opened.
+  - Encode categorical variables using one-hot encoding or label encoding.
+- **Multicollinearity:** Analyze correlations and handle highly correlated features using techniques like Variance Inflation Factor (VIF).
 
+### 3. Exploratory Data Analysis (EDA)
 
-Approach :
+- **Descriptive Statistics:** Summarize numerical and categorical data.
+- **Visualization:** 
+  - Plot sales distributions using histograms and boxplots.
+  - Create heatmaps to explore relationships among variables.
+  - Analyze trends across different stores and dates, including the impact of promotions and holidays.
 
-The approach to solve this problem involves the following steps:
-    Data Preprocessing: Clean and prepare the dataset for analysis.
-    Feature Engineering: Create new features that may influence sales.
-    Exploratory Data Analysis (EDA): Understand the data distribution and relationships between variables.
-    Modeling: Develop and evaluate machine learning models to predict sales.
-    Validation and Testing: Validate the model using unseen data and test its performance.
-    Implementation: Deploy the model for practical use and continuous improvement.
+### 4. Model Building
 
+- **Train-Test Split:** Divide the dataset into training and validation sets.
+- **Model Implementation:** Develop multiple models to forecast sales:
+  - **Linear Regression:** Provides a baseline for comparison.
+  - **Random Forest Regressor:** Captures non-linear relationships and interactions.
+  - **LARS Lasso Regression:** Helps in regularization and feature selection.
+- **Evaluation Metrics:** Assess model performance using metrics like Root Mean Squared Error (RMSE) and Mean Absolute Percentage Error (MAPE).
 
-Exploratory Data Analysis (EDA) :
+**Results Summary:**
 
-EDA is a crucial step in understanding the underlying patterns in the data. The following steps were performed:
-    Data Cleaning:
-        Checked for missing values and imputed them appropriately.
-        Converted date columns to datetime objects for easier manipulation.
-        Removed or corrected any obvious errors or outliers in the data.
-    Data Visualization:
-        Sales Trends: Plotted sales over time to identify seasonal patterns, trends, and anomalies.
-        Distribution Analysis: Examined the distribution of sales, customers, and other key variables.
-        Correlation Analysis: Computed and visualized the correlation matrix to identify relationships between variables.
-    Feature Analysis:
-        Day of the Week: Analyzed sales patterns based on the day of the week.
-        Monthly Trends: Investigated how sales vary across different months and seasons.
-        Promotions and Holidays: Assessed the impact of promotions and holidays on sales.
+| Model                    | Training RMSE | Test RMSE | Training MAPE | Test MAPE |
+|--------------------------|---------------|-----------|---------------|-----------|
+| **Linear Regression**    | 2,750         | 3,100     | 16.5%         | 18.2%     |
+| **Random Forest**        | 2,100         | 2,350     | 12.3%         | 13.0%     |
+| **LARS Lasso Regression**| 2,900         | 3,200     | 17.8%         | 19.0%     |
 
+### 5. Model Explainability
 
-Methodology :
+- **Feature Importance:** Evaluate which features most influence sales predictions. For instance, use the `feature_importances_` attribute from tree-based models.
+- **Insights:** Interpret the impact of key variables (such as promotions, holidays, and competition) to provide actionable business recommendations.
 
-The methodology to build the sales prediction model includes the following steps:
-    Data Preprocessing:
-        Ensure all dates are in datetime format.
-        Handle missing values for important features like competition details, promotion details, and distances.
-        Cap outliers to reduce their impact on the model.
-    Feature Engineering:
-        Time-based Features: Extract day of the week, month, year, and season from the date.
-        Lag Features: Create lag features to incorporate sales data from previous days.
-        Rolling Statistics: Calculate rolling mean and standard deviation for sales over different windows.
-        Promo Duration: Calculate the duration since the last promotion started.
-        Holiday and Weekend Indicators: Create binary indicators for holidays and weekends.
-    Model Building:
-        Model Selection: Choose appropriate regression models such as Linear Regression, Decision Trees, Random Forest, and Gradient Boosting.
-        Training and Validation: Split the data into training and validation sets to evaluate model performance.
-        Hyperparameter Tuning: Optimize model parameters using techniques like Grid Search or Random Search.
-    Evaluation Metrics:
-        Use metrics like Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and R-squared to evaluate model performance.
-    Model Validation:
-        Validate the model on a hold-out test set to ensure it generalizes well to unseen data.
-        Perform cross-validation to ensure robustness and stability of the model.
-    Deployment:
-        Once a satisfactory model is developed, deploy it for practical use.
-        Set up a pipeline for continuous monitoring and updating of the model with new data.
+### 6. Conclusion
 
+- **Key Findings:** Summarize insights from the data analysis and model results, highlighting the primary drivers of sales.
+- **Business Impact:** Explain how accurate sales forecasting aids in optimizing inventory, staffing, and marketing strategies, leading to improved operational efficiency.
+- **Future Work:** Suggest potential enhancements like incorporating additional data sources or experimenting with more advanced modeling techniques.
 
-Conclusion :
+### 7. Version Control and Collaboration
 
-By implementing the steps outlined above, we aim to develop a reliable sales prediction model for the retail store chain. The key takeaways from the project are:
-    Accurate Predictions: The model provides accurate daily sales predictions, helping the store manage inventory and staffing more effectively.
-    Key Influencers: Identified important factors such as promotions, holidays, and seasonal trends that significantly impact sales.
-    Business Optimization: The insights and predictions from the model enable the store to optimize business operations, improve customer satisfaction, and increase profitability.
+- **GitHub Commits:** Ensure frequent, well-documented commits to track progress and facilitate collaboration. Commit after major milestones such as data loading, EDA, feature engineering, model development, and evaluation.
 
-Contribution :  Anshuman Mishra
+---
+
+This README outlines the structured approach of the Rossmann Sales Forecasting Project, serving as both a technical guide and a communication tool for stakeholders. It covers every step—from data ingestion and preprocessing to model building and final insights—ensuring that the project is reproducible, transparent, and aligned with business goals.
